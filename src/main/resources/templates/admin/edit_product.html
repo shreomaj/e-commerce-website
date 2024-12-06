@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Edit Product Page</title>
+</head>
+<body>
+	<section>
+		<div class="container-fluid p-5 mt-4">
+			<div class="row p-4">
+				<div class="col-md-8 offset-md-3">
+					<div class="card card-sh">
+						<div class="card-header text-center fs-4">
+						<p class="fs-3" >Edit Product Details</p>
+						
+						<!-- To add the message of success or failure, commonServiceImpl here is object use c small -->
+						<th:block th:if="${session.succMsg}" >
+							<p class="text-success fw-bold">[[${session.succMsg}]] </p>
+							<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+						</th:block>
+						<th:block th:if="${session.errorMsg}" >
+							<p class="text-danger fw-bold">[[${session.errorMsg}]] </p>
+							<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+						</th:block>
+						
+						</div>
+						<div class="card-body">
+						<!-- For the image is multipart , thats why add enctype -->
+						<form action="/admin/updateProduct" 
+							method="post" enctype="multipart/form-data">
+						<input type="hidden" name="id" th:value="${product.id}">
+						<div class="mb-3">
+							<label>Enter Title</label><input type="text" name="title" th:value="${product.title}"
+								class="form-control">
+						</div>
+						<div class="mb-3">
+							<label>Enter Description</label>
+							<textarea rows="3" cols="" class="form-control" name="description" >[[${product.description}]]></textarea>
+						</div>
+						<div class ="row">
+						
+							<div class="mb-3 col">
+								<label>Category</label>
+									<select class="form-control" name="category" th:value="${product.category}">
+										<option>[[${product.category}]]</option>
+										<option th:each="c:${categories}" >[[${c.name}]]</option>
+									</select>
+								</div>
+								<div class="mb-3">
+									<label>Enter Price</label>
+									<input type="number" name="price" 
+									th:value="${product.price}"
+										class="form-control">
+								</div>
+							</div>
+								
+								<div class="row">
+									<div class="mb-3 col">
+										<label>Discount</label>
+										<input type="number" name="discount" th:value="${product.discount}"
+											class="form-control"/>
+									</div>
+									<div class="mb-3 col">
+										<label>Discount Price</label><input type="number" readonly
+										  th:value="${product.discountPrice}"
+											class="form-control">
+									</div>
+								</div>
+								<div class="mb-3">
+									<label>Status</label>
+									
+									<div class="form-check">
+										  <input class="form-check-input" type="radio" 
+										  th:checked ="${product.isActive==true}"
+										   value="true"
+										  name="isActive" id="flexRadioDefault1">
+										  <label class="form-check-label" for="flexRadioDefault1">
+										     Active
+										  </label>
+										</div>
+										<!--  for the inactive 0 was not coming , thats why adding value="false" -->
+										<div class="form-check">
+										  <input class="form-check-input" type="radio" th:checked ="${product.isActive==false}" name="isActive" value="false" id="flexRadioDefault2" >
+										  <label class="form-check-label" for="flexRadioDefault2">InActive</label>
+										</div>
+								</div>
+								<div class="row">
+								
+									<div class="mb-3 col">
+										<label>Enter stock</label><input type="text" name="stock" th:value="${product.stock}"
+											class="form-control"/>
+									</div>
+									<div class="mb-3 col">
+										<label>Upload Image</label><input type="file" name="file"  th:value="${product.image}"
+											class="form-control">
+									</div>
+									<div class="mt-3">
+										<img th:src="@{'/img/product_img/' + ${product.image}}" width="100px" height="100px">
+									</div>
+									
+									
+								</div>
+								<button class="btn btn-primary col-md-12">Update</button>
+								
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+</body>
+</html>
